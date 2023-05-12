@@ -12,7 +12,9 @@ import com.bumptech.glide.Glide
 import fastcampus.aop.part4.chapter01.R
 import fastcampus.aop.part4.chapter01.model.VideoModel
 
-class VideoAdapter(val callback: (String, String) -> Unit) : ListAdapter<VideoModel, VideoAdapter.ViewHolder>(diffUtil) {
+// 메인과 프래그먼트 두개에서 중복 사용
+class VideoAdapter(val callback: (String, String) -> Unit) :
+    ListAdapter<VideoModel, VideoAdapter.ViewHolder>(diffUtil) {
 
     inner class ViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
 
@@ -36,7 +38,9 @@ class VideoAdapter(val callback: (String, String) -> Unit) : ListAdapter<VideoMo
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
-        return ViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.item_video, parent, false))
+        return ViewHolder(
+            LayoutInflater.from(parent.context).inflate(R.layout.item_video, parent, false)
+        )
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {

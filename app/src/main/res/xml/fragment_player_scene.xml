@@ -7,6 +7,8 @@
         motion:constraintSetStart="@id/start"
         motion:duration="300">
         <KeyFrameSet>
+
+<!--            특정 부분에서 framePosition 에서 투명도 0으로 설정해서 안보이도록 재생버튼 , 타이틀텍스트-->
             <KeyAttribute
                 android:alpha="0"
                 motion:framePosition="10"
@@ -15,6 +17,8 @@
                 android:alpha="0"
                 motion:framePosition="10"
                 motion:motionTarget="@+id/bottomPlayerControlButton" />
+
+<!--            아래에서부터 커져서 위쪽으로 쭉 커지도록 x값 1과 width값 1을 줌 curvefit을 리니어로 준이유는 둥그렇게 타는게아니라 위쪽으로 쭉올라가는걸 원해서-->
             <KeyPosition
                 motion:motionTarget="@+id/playerView"
                 motion:framePosition="10"

@@ -15,7 +15,7 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 
 /**
- *
+ *q
  * MotionLayout 이용하여 화면 전환 UI 구성하기 (1)
  * MotionLayout 이용하여 화면 전환 UI 구성하기 (2)
  * 영상 목록 API 만들기
@@ -39,10 +39,10 @@ class MainActivity : AppCompatActivity() {
             .commit()
 
         videoAdapter = VideoAdapter(callback = { url, title ->
+            // 전체 프래그먼트를 가져와서 해당 프래그먼트들을 돌면서 playerFragment를 찾아옴, playerfragment play 매서드에 인자값 전달하고 실행함
             supportFragmentManager.fragments.find { it is PlayerFragment }?.let {
                 (it as PlayerFragment).play(url, title)
             }
-
         })
 
         findViewById<RecyclerView>(R.id.mainRecyclerView).apply {
@@ -53,6 +53,8 @@ class MainActivity : AppCompatActivity() {
         getVideoList()
     }
 
+
+    // 레트로핏으로 데이터 받아 와서 리스트에 전달
     private fun getVideoList() {
         val retrofit = Retrofit.Builder()
             .baseUrl("https://run.mocky.io/")

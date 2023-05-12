@@ -45,14 +45,18 @@ class PlayerFragment : Fragment(R.layout.fragment_player) {
         getVideoList()
     }
 
+
+    // 모션레이아웃을 메인 레이아웃에 연결
     private fun initMotionLayoutEvent(fragmentPlayerBinding: FragmentPlayerBinding) {
         fragmentPlayerBinding.playerMotionLayout.setTransitionListener(object : MotionLayout.TransitionListener {
             override fun onTransitionStarted(p0: MotionLayout?, p1: Int, p2: Int) {}
 
+            // 모션이 변경될 때
             override fun onTransitionChange(motionLayout: MotionLayout?, startId: Int, endId: Int, progress: Float) {
                 binding?.let {
                     (activity as MainActivity).also { mainActivity ->
-                        mainActivity.findViewById<MotionLayout>(R.id.mainMotionLayout).progress = abs(progress)
+                        mainActivity.findViewById<MotionLayout>(R.id.mainMotionLayout).progress = abs(progress) //프래그먼트 모션레이아웃 진행도에 따라서 메인레이아웃 모션레이아웃 진행도 변경
+
                     }
                 }
             }
@@ -69,6 +73,7 @@ class PlayerFragment : Fragment(R.layout.fragment_player) {
 
     private fun initRecyclerView(fragmentPlayerBinding: FragmentPlayerBinding) {
 
+        // 아이템 클릭하면 play에 전달
         videoAdapter = VideoAdapter(callback = { url, title ->
             play(url, title)
         })
@@ -91,6 +96,7 @@ class PlayerFragment : Fragment(R.layout.fragment_player) {
         binding?.let {
             player?.addListener(object: Player.EventListener {
 
+                // 재생버튼 아이콘 변경하는 리스너 , 재생중 상태 변경 되는것을 감지하기 위해서 리스너 등록
                 override fun onIsPlayingChanged(isPlaying: Boolean) {
                     super.onIsPlayingChanged(isPlaying)
 
@@ -110,6 +116,8 @@ class PlayerFragment : Fragment(R.layout.fragment_player) {
         fragmentPlayerBinding.bottomPlayerControlButton.setOnClickListener {
             val player = this.player ?: return@setOnClickListener
 
+            // 플레이어가 재생중일때 플레이 정지 , 재생중이 아닐때 플레이
+            // 위에 플레이어에 리스너를 달아놔서 재생중이면 (재생아이콘) , 아니면 (일시정지아이콘)으로 변경됨
             if (player.isPlaying) {
                 player.pause()
             } else {
@@ -119,6 +127,7 @@ class PlayerFragment : Fragment(R.layout.fragment_player) {
 
     }
 
+    // 레트로 핏으로 데이터 받아오고 어뎁터에 리스트 전달
     private fun getVideoList() {
         val retrofit = Retrofit.Builder()
             .baseUrl("https://run.mocky.io/")
@@ -147,6 +156,8 @@ class PlayerFragment : Fragment(R.layout.fragment_player) {
 
     fun play(url: String, title: String) {
 
+
+        // mp4로 변환해서 prepare()매서드로 초깃값 설정하고 , play() 매서드를 이용해서 재생
         context?.let {
             val dataSourceFactory = DefaultDataSourceFactory(it)
             val mediaSource = ProgressiveMediaSource.Factory(dataSourceFactory)
@@ -156,7 +167,7 @@ class PlayerFragment : Fragment(R.layout.fragment_player) {
             player?.play()
         }
 
-
+     // 프래그먼트의 모션레이아웃을 꽉찬화면으로 변경하고 , 타이틀을 받아온 title 값으로 지정
         binding?.let {
             it.playerMotionLayout.transitionToEnd()
             it.bottomTitleTextView.text = title
@@ -164,6 +175,7 @@ class PlayerFragment : Fragment(R.layout.fragment_player) {
         }
     }
 
+    // 잠깐 나갔다오거나 , 종료햇을때 플레이어 종료
     override fun onStop() {
         super.onStop()
 
